@@ -87,7 +87,9 @@ namespace TTT
                 samplerState: SamplerState.PointClamp,
                 transformMatrix: Camera.Transform(GraphicsDevice, WindowDimensions));
             foreach (var tile in Map.Tiles)
+            {
                 tile.Draw(SpriteBatch);
+            }
             SpriteBatch.End();
             base.Draw(gameTime);
         }

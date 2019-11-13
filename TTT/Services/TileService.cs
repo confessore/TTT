@@ -22,7 +22,7 @@ namespace TTT.Services
         {
             var s2w = TTT.ScreenToWorld(mouseState.Position.ToVector2());
             var rect = new Rectangle((int)s2w.X, (int)s2w.Y, 1, 1);
-            var tile = TTT.Map.Tiles.ToList().FirstOrDefault(x => rect.Intersects(x.SpriteRectangle));
+            var tile = TTT.Map.Tiles.FirstOrDefault(x => rect.Intersects(x.SpriteRectangle));
             Console.WriteLine(tile != null);
             if (tile != null)
             {

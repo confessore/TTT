@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Threading.Tasks;
 using TTT.Enums;
 
@@ -17,7 +18,7 @@ namespace TTT.Models
             position *= 16;
             this.position = position;
             this.sprite = TTT.PlayerTextures[Player];
-            SpriteRectangle = new Rectangle((int)position.X, (int)position.Y, 16, 16);
+            SpriteRectangle = new Rectangle((int)position.X - 8, (int)position.Y - 8, 16, 16);
         }
 
         public float X { get; set; } = new float();
