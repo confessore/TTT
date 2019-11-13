@@ -20,16 +20,17 @@ namespace TTT.Services
 
         public async Task UpdateTile(MouseState mouseState)
         {
-            var rect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+            var s2w = TTT.ScreenToWorld(mouseState.Position.ToVector2());
+            var rect = new Rectangle((int)s2w.X, (int)s2w.Y, 1, 1);
             var tile = TTT.Map.Tiles.ToList().FirstOrDefault(x => rect.Intersects(x.SpriteRectangle));
-            foreach (var t in TTT.Map.Tiles)
+            Console.WriteLine(tile != null);
+            if (tile != null)
             {
-                Console.WriteLine(t.position);
-                Console.WriteLine(TTT.ScreenToWorld(mouseState.Position.ToVector2()));
+                Console.WriteLine(tile.position);
+                TTT.Map.Tiles.Remove(tile);
+                await tile.Update(Player.Human);
+                TTT.Map.Tiles.Add(tile);
             }
-            //TTT.Map.Tiles.Remove(tile);
-            //await tile.Update(Player.Human);
-            //TTT.Map.Tiles.Add(tile);
         }
     }
 }
