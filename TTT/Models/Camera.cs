@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace TTT.Models
 {
@@ -12,10 +11,11 @@ namespace TTT.Models
         }
 
         SpriteBatch SpriteBatch { get; set; }
-        Vector2 Position { get; set; } = new Vector2();
+        public Matrix TransformMatrix { get; set; } = new Matrix();
+        public Vector2 Position { get; set; } = new Vector2(-32, -32);
         public float Rotation { get; set; } = new float();
 
-        float zoom = 1f;
+        float zoom = 4f;
         public float Zoom
         {
             get => zoom;
@@ -41,6 +41,7 @@ namespace TTT.Models
                 Matrix.CreateRotationZ(Rotation) *
                 Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
                 Matrix.CreateTranslation(new Vector3(windowDimensions.width * 0.5f, windowDimensions.height * 0.5f, 0));
+            TransformMatrix = transform;
             return transform;
         }
 

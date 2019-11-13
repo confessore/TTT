@@ -39,9 +39,9 @@ namespace TTT
         const int zoom = 1;
         GraphicsDeviceManager GraphicsDeviceManager { get; set; }
         SpriteBatch SpriteBatch { get; set; }
-        Camera Camera { get; set; }
         Rectangle World { get; set; }
 
+        public static Camera Camera { get; set; }
         public static Matrix TransformMatrix { get; set; }
         public static Map Map { get; set; } = new Map();
         public static Dictionary<Board, (Texture2D, Vector2)> BoardTextures { get; set; } = new Dictionary<Board, (Texture2D, Vector2)>();
@@ -62,9 +62,10 @@ namespace TTT
             Camera = new Camera(SpriteBatch);
         }
 
-        public static Vector2 WorldToMouse(Tile tile, MouseState mouseState)
+        public static Vector2 ScreenToWorld(Vector2 onScreen)
         {
-            return tile.position - Vector2.Transform(mouseState.Position.ToVector2(), Matrix.Invert(TransformMatrix));
+            var matrix = Matrix.Invert(Camera.TransformMatrix);
+            return Vector2.Transform(onScreen, matrix);
         }
 
         protected override async void Update(GameTime gameTime)

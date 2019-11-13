@@ -25,11 +25,11 @@ namespace TTT.Services
             foreach (var t in TTT.Map.Tiles)
             {
                 Console.WriteLine(t.position);
-                Console.WriteLine(TTT.WorldToMouse(t, mouseState));
+                Console.WriteLine(TTT.ScreenToWorld(mouseState.Position.ToVector2()));
             }
-            TTT.Map.Tiles.Remove(tile);
-            await tile.Update(Player.Human);
-            TTT.Map.Tiles.Add(tile);
+            //TTT.Map.Tiles.Remove(tile);
+            //await tile.Update(Player.Human);
+            //TTT.Map.Tiles.Add(tile);
         }
     }
 }
