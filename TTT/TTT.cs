@@ -43,7 +43,7 @@ namespace TTT
 
         public static Camera Camera { get; set; }
         public static Matrix TransformMatrix { get; set; }
-        public static Map Map { get; set; } = new Map();
+        public static Map Map { get; set; }
         public static Dictionary<Board, (Texture2D, Vector2)> BoardTextures { get; set; } = new Dictionary<Board, (Texture2D, Vector2)>();
         public static Dictionary<Player, (Texture2D, Vector2)> PlayerTextures { get; set; } = new Dictionary<Player, (Texture2D, Vector2)>();
 
@@ -86,9 +86,10 @@ namespace TTT
                 sortMode: SpriteSortMode.Immediate,
                 samplerState: SamplerState.PointClamp,
                 transformMatrix: Camera.Transform(GraphicsDevice, WindowDimensions));
+            Map.Draw48(SpriteBatch);
             foreach (var tile in Map.Tiles)
             {
-                tile.Draw(SpriteBatch);
+                tile.Draw16(SpriteBatch);
             }
             SpriteBatch.End();
             base.Draw(gameTime);

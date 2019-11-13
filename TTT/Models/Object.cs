@@ -17,7 +17,7 @@ namespace TTT.Models
             this.rotation = rotation;
         }
 
-        public void Draw(SpriteBatch spriteBatch) =>
+        public void Draw16(SpriteBatch spriteBatch) =>
             spriteBatch.Draw(
                 this.sprite.texture,
                 this.position,
@@ -30,5 +30,19 @@ namespace TTT.Models
                 SpriteEffects.None,
                 0
             );
+
+        public void Draw48(SpriteBatch spriteBatch) =>
+            spriteBatch.Draw(
+            this.sprite.texture,
+            this.position,
+            new Rectangle((16 * this.sprite.position).ToPoint(),
+            (Vector2.One * 48).ToPoint()),
+            Color.White,
+            this.rotation,
+            Vector2.One * this.scale * 8,
+            Vector2.One * this.scale,
+            SpriteEffects.None,
+            0
+        );
     }
 }

@@ -9,4 +9,16 @@
     <ProjectReference Include="..\TTT\TTT.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="board.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\board.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\sprites.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

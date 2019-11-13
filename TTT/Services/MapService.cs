@@ -18,7 +18,7 @@ namespace TTT.Services
 
         public Task<Map> GenerateNewMap()
         {
-            var map = new Map();
+            var map = new Map(new Vector2(16, 16));
             for (int x = 0; x < 3; x++)
                 for (int y = 0; y < 3; y++)
                     map.Tiles.Add(new Tile(new Vector2(x, y)));
