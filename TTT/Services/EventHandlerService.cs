@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace TTT.Services
 {
@@ -11,7 +12,7 @@ namespace TTT.Services
 
         Task OnGameOver()
         {
-
+            Console.WriteLine("Game Over!");
             return Task.CompletedTask;
         }
     }

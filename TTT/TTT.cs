@@ -33,6 +33,8 @@ namespace TTT
             GraphicsDeviceManager.PreferredBackBufferHeight = WindowDimensions.height;
             GraphicsDeviceManager.PreferredBackBufferWidth = WindowDimensions.width;
             TransformMatrix = Matrix.CreateScale(zoom);
+            Turn = Player.Human;
+            Random = new Random();
         }
 
         (int width, int height) WindowDimensions => (width: 270, height: 270);
@@ -41,11 +43,13 @@ namespace TTT
         SpriteBatch SpriteBatch { get; set; }
         Rectangle World { get; set; }
 
+        public static Random Random { get; set; }
         public static Camera Camera { get; set; }
         public static Matrix TransformMatrix { get; set; }
         public static Map Map { get; set; }
         public static Dictionary<Board, (Texture2D, Vector2)> BoardTextures { get; set; } = new Dictionary<Board, (Texture2D, Vector2)>();
         public static Dictionary<Player, (Texture2D, Vector2)> PlayerTextures { get; set; } = new Dictionary<Player, (Texture2D, Vector2)>();
+        public static Player Turn { get; set; }
 
 
         protected override async void Initialize()
@@ -74,8 +78,10 @@ namespace TTT
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyState.IsKeyDown(Keys.Escape))
                 Exit();
             MouseState mouseState = Mouse.GetState();
-            if (mouseState.LeftButton == ButtonState.Pressed)
-                await tileService.UpdateTile(mouseState);
+            if (Turn == Player.Human && mouseState.LeftButton == ButtonState.Pressed)
+                await tileService.UpdateTile(mouseState, Player.Human);
+            if (Turn == Player.Computer)
+                await tileService.UpdateRandomTile(Player.Computer);
             base.Update(gameTime);
         }
 
