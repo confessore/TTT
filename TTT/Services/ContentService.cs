@@ -13,7 +13,7 @@ namespace TTT.Services
         public Task LoadContent(ContentManager contentManager)
         {
             Texture2D boards = contentManager.Load<Texture2D>("boards");
-            Texture2D players = contentManager.Load<Texture2D>("players");
+            Texture2D players = contentManager.Load<Texture2D>("sprites");
             TTT.BoardTextures = new Dictionary<Board, (Texture2D, Vector2)>
             {
                 { Board.Normal, (boards, new Vector2(0, 0)) },

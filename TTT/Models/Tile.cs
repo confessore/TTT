@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 using TTT.Enums;
 
 namespace TTT.Models
@@ -11,7 +12,12 @@ namespace TTT.Models
         {
             X = position.X;
             Y = position.Y;
+            position.X += 1;
+            position.Y += 1;
+            position *= 16;
+            this.position = position;
             this.sprite = TTT.PlayerTextures[Player];
+            SpriteRectangle = new Rectangle((int)position.X, (int)position.Y, 16, 16);
         }
 
         public float X { get; set; } = new float();
@@ -19,13 +25,13 @@ namespace TTT.Models
         public Player Player { get; set; } = new Player();
         public bool Occupied =>
             Player != Player.None;
+        public Rectangle SpriteRectangle { get; set; } = new Rectangle();
 
-        public void Update(Vector2 position, Player player)
+        public Task Update(Player player)
         {
-            X = position.X;
-            Y = position.Y;
             Player = player;
             this.sprite = TTT.PlayerTextures[Player];
+            return Task.CompletedTask;
         }
     }
 }

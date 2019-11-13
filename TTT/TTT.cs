@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using TTT.Enums;
 using TTT.Models;
@@ -11,32 +12,38 @@ namespace TTT
     public class TTT : Game
     {
         readonly IContentService contentService;
+        readonly ITileService tileService;
         readonly IMapService mapService;
         readonly IRegistrationService registrationService;
 
         public TTT(
             IContentService contentService,
+            ITileService tileService,
             IMapService mapService,
             IRegistrationService registrationService)
         {
             this.contentService = contentService;
+            this.tileService = tileService;
             this.mapService = mapService;
             this.registrationService = registrationService;
             GraphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            World = new Rectangle(0, 0, WindowSize.width / zoom, WindowSize.height / zoom);
-            GraphicsDeviceManager.PreferredBackBufferHeight = WindowSize.height;
-            GraphicsDeviceManager.PreferredBackBufferWidth = WindowSize.width;
+            World = new Rectangle(0, 0, WindowDimensions.width / zoom, WindowDimensions.height / zoom);
+            GraphicsDeviceManager.PreferredBackBufferHeight = WindowDimensions.height;
+            GraphicsDeviceManager.PreferredBackBufferWidth = WindowDimensions.width;
+            TransformMatrix = Matrix.CreateScale(zoom);
         }
 
-        (int width, int height) WindowSize => (640, 640);
-        const int zoom = 4;
+        (int width, int height) WindowDimensions => (width: 270, height: 270);
+        const int zoom = 1;
         GraphicsDeviceManager GraphicsDeviceManager { get; set; }
         SpriteBatch SpriteBatch { get; set; }
+        Camera Camera { get; set; }
         Rectangle World { get; set; }
 
-        public static Map Map { get; set; }
+        public static Matrix TransformMatrix { get; set; }
+        public static Map Map { get; set; } = new Map();
         public static Dictionary<Board, (Texture2D, Vector2)> BoardTextures { get; set; } = new Dictionary<Board, (Texture2D, Vector2)>();
         public static Dictionary<Player, (Texture2D, Vector2)> PlayerTextures { get; set; } = new Dictionary<Player, (Texture2D, Vector2)>();
 
@@ -52,15 +59,22 @@ namespace TTT
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Camera = new Camera(SpriteBatch);
         }
 
-        protected override void Update(GameTime gameTime)
+        public static Vector2 WorldToMouse(Tile tile, MouseState mouseState)
+        {
+            return tile.position - Vector2.Transform(mouseState.Position.ToVector2(), Matrix.Invert(TransformMatrix));
+        }
+
+        protected override async void Update(GameTime gameTime)
         {
             KeyboardState keyState = Keyboard.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyState.IsKeyDown(Keys.Escape))
                 Exit();
-            //foreach (var tile in Map.Tiles)
-            //    tile.Update(tile.position, tile.Player);
+            MouseState mouseState = Mouse.GetState();
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                await tileService.UpdateTile(mouseState);
             base.Update(gameTime);
         }
 
@@ -70,7 +84,7 @@ namespace TTT
             SpriteBatch.Begin(
                 sortMode: SpriteSortMode.Immediate,
                 samplerState: SamplerState.PointClamp,
-                transformMatrix: Matrix.CreateScale(zoom));
+                transformMatrix: Camera.Transform(GraphicsDevice, WindowDimensions));
             foreach (var tile in Map.Tiles)
                 tile.Draw(SpriteBatch);
             SpriteBatch.End();
